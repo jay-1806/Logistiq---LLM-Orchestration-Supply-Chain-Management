@@ -19,8 +19,8 @@ logging.basicConfig(level=logging.INFO, format="%(name)s - %(levelname)s - %(mes
 
 # PAGE CONFIG
 st.set_page_config(
-    page_title="Logistiq AI â€” Supply Chain Copilot",
-    page_icon="ðŸ­",
+    page_title="Logistiq AI - Supply Chain Copilot",
+    page_icon=":factory:",
     layout="wide",
 )
 
@@ -201,7 +201,7 @@ def get_agent():
     return agent
 
 
-# SESSION STATE â€” Persistent across interactions
+# SESSION STATE - Persistent across interactions
 if "messages" not in st.session_state:
     st.session_state.messages = []
 if "agent_responses" not in st.session_state:
@@ -426,9 +426,9 @@ def render_result_card(response):
             )
 
 
-# SIDEBAR â€” Controls
+# SIDEBAR - Controls
 with st.sidebar:
-    st.markdown("## ðŸ­ Logistiq AI Console")
+    st.markdown("## Logistiq AI Console")
     st.markdown("---")
 
     # Role selector with PIN protection for elevated roles.
@@ -444,7 +444,7 @@ with st.sidebar:
     role_pin_required = (settings.role_change_pin or "").strip()
 
     selected_role = st.selectbox(
-        "ðŸ‘¤ Select User Role",
+        "Select User Role",
         options=role_options,
         help="Role-based access control for tool permissions",
         key="role_selector",
@@ -462,7 +462,7 @@ with st.sidebar:
     if pin_needed:
         st.warning("PIN required to change analyst/manager roles.")
         entered_pin = st.text_input(
-            "ðŸ” Enter Role Change PIN",
+            "Enter Role Change PIN",
             type="password",
             key="role_pin_input",
         )
@@ -495,11 +495,11 @@ with st.sidebar:
     st.markdown("---")
 
     # Show only current role permission.
-    st.markdown("### ðŸ” Role Permissions")
+    st.markdown("### Role Permissions")
     role_info = {
-        "viewer": "ðŸ“– Can search documents only",
-        "analyst": "ðŸ“Š Can query database + search docs",
-        "manager": "ðŸ‘” Full access to all tools",
+        "viewer": "Can search documents only",
+        "analyst": "Can query database + search docs",
+        "manager": "Full access to all tools",
     }
     st.markdown(
         f"<div class='perm-card'>{role_info[role]}</div>",
@@ -509,7 +509,7 @@ with st.sidebar:
     st.markdown("---")
     
     # Cost summary
-    st.markdown("### ðŸ’° Cost Tracker")
+    st.markdown("### Cost Tracker")
     try:
         agent = get_agent()
         summary = agent.cost_tracker.get_summary()
@@ -523,7 +523,7 @@ with st.sidebar:
         st.info("No queries yet")
     
     st.markdown("---")
-    st.markdown("### ðŸ’¡ Try These Queries")
+    st.markdown("### Try These Queries")
     if role == "viewer":
         example_queries = [
             "What are the key points from the shipping SLA policy?",
@@ -548,7 +548,7 @@ with st.sidebar:
     st.markdown("---")
 
     # Clear chat is intentionally at the very bottom of the sidebar.
-    if st.button("ðŸ—‘ï¸ Clear Chat", use_container_width=True):
+    if st.button("Clear Chat", use_container_width=True):
         st.session_state.messages = []
         st.session_state.agent_responses = []
         agent = get_agent()
@@ -556,8 +556,8 @@ with st.sidebar:
         st.rerun()
 
 
-# MAIN AREA â€” Chat Interface
-st.markdown("# ðŸ­ Logistiq AI â€” Supply Chain Copilot")
+# MAIN AREA - Chat Interface
+st.markdown("# Logistiq AI - Supply Chain Copilot")
 st.markdown("*AI-powered assistant for supply chain operations. Ask about orders, inventory, shipments, quality, and policies.*")
 st.markdown("---")
 
@@ -602,19 +602,19 @@ for i, message in enumerate(st.session_state.messages):
             response = st.session_state.agent_responses[assistant_response_idx]
             render_result_card(response)
             
-            with st.expander("ðŸ” Decision Trail â€” See how the agent arrived at this answer"):
+            with st.expander("Decision Trail - See how the agent arrived at this answer"):
                 # Show plan
-                st.markdown("#### ðŸ“‹ Plan")
+                st.markdown("#### Plan")
                 for j, step in enumerate(response.plan.steps):
-                    st.markdown(f"**Step {j+1}:** `{step.tool_name}` â€” {step.reasoning}")
+                    st.markdown(f"**Step {j+1}:** `{step.tool_name}` - {step.reasoning}")
                 
                 if not response.plan.steps:
-                    st.info("No tools needed â€” answered directly.")
+                    st.info("No tools needed - answered directly.")
                 
                 # Show step results
-                st.markdown("#### ðŸ“¦ Tool Results")
+                st.markdown("#### Tool Results")
                 for result in response.step_results:
-                    status = "âœ…" if result.success else "âŒ"
+                    status = "OK" if result.success else "FAIL"
                     st.markdown(f"**{status} {result.tool_name}**")
                     if result.success:
                         st.code(str(result.output)[:500], language="json")
@@ -638,7 +638,7 @@ if user_input:
     
     # Get agent response
     with st.chat_message("assistant"):
-        with st.spinner("ðŸ¤” Thinking..."):
+        with st.spinner("Thinking..."):
             try:
                 agent = get_agent()
                 response = agent.query(user_input, user_role)
@@ -654,21 +654,21 @@ if user_input:
                 })
                 
                 # Show decision trail
-                with st.expander("ðŸ” Decision Trail â€” See how the agent arrived at this answer"):
+                with st.expander("Decision Trail - See how the agent arrived at this answer"):
                     if response.structured_answer is not None:
-                        st.markdown("#### ðŸ§± Structured Output")
+                        st.markdown("#### Structured Output")
                         st.json(response.structured_answer.model_dump())
 
-                    st.markdown("#### ðŸ“‹ Plan")
+                    st.markdown("#### Plan")
                     for j, step in enumerate(response.plan.steps):
-                        st.markdown(f"**Step {j+1}:** `{step.tool_name}` â€” {step.reasoning}")
+                        st.markdown(f"**Step {j+1}:** `{step.tool_name}` - {step.reasoning}")
                     
                     if not response.plan.steps:
-                        st.info("No tools needed â€” answered directly.")
+                        st.info("No tools needed - answered directly.")
                     
-                    st.markdown("#### ðŸ“¦ Tool Results")
+                    st.markdown("#### Tool Results")
                     for result in response.step_results:
-                        status = "âœ…" if result.success else "âŒ"
+                        status = "OK" if result.success else "FAIL"
                         st.markdown(f"**{status} {result.tool_name}**")
                         if result.success:
                             st.code(str(result.output)[:500], language="json")
