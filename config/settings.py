@@ -12,6 +12,7 @@ class Settings(BaseSettings):
 
     # --- LLM Configuration ---
     groq_api_key: str = Field(
+        default="",
         description="Your Groq API key from https://console.groq.com/keys"
     )
     llm_model_name: str = Field(
@@ -78,6 +79,8 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
         # This means GROQ_API_KEY in .env maps to groq_api_key field
         case_sensitive = False
+        # Ignore unrelated env vars (common on hosted platforms like Streamlit Cloud)
+        extra = "ignore"
 
 
 # Create a single global instance â€” import this everywhere
