@@ -4,7 +4,7 @@ An enterprise-grade AI agent platform that decomposes complex supply chain quest
 
 ## Live App
 
-- Streamlit Deployment: https://logistiq---llm-orchestration-supply-chain-management-znowsvy9x.streamlit.app/
+- Check out the App here: [DEMO](https://logistiq---llm-orchestration-supply-chain-management-znowsvy9x.streamlit.app/)
 
 ## App Demo
 
