@@ -1,0 +1,30 @@
+# ===== LLM & Agent Framework =====
+langchain>=0.3.0              # Core framework for building LLM chains and agents
+langchain-groq>=0.2.0         # Groq integration for LangChain
+langchain-community>=0.3.0    # Community tools, vector stores, retrievers
+
+# ===== Vector Database & Embeddings =====
+chromadb>=0.5.0               # Vector database for storing document embeddings
+sentence-transformers>=3.0.0  # Free, local embedding models (no API key needed)
+
+# ===== Structured Outputs & Validation =====
+pydantic>=2.0.0               # Data validation — forces LLM output into reliable schemas
+pydantic-settings>=2.0.0      # Load settings from .env files
+
+# ===== RAG - Document Processing =====
+pypdf>=4.0.0                  # Read PDF documents
+rank-bm25>=0.2.2              # Sparse retrieval (keyword matching) for hybrid search
+
+# ===== Monitoring & Evaluation =====
+mlflow>=2.10.0                # Experiment tracking — log every agent run
+
+# ===== UI =====
+streamlit>=1.30.0             # Quick demo UI for the chatbot
+
+# ===== Utilities =====
+python-dotenv>=1.0.0          # Load .env files
+tiktoken>=0.7.0               # Count tokens (important for cost tracking)
+
+# ===== Testing =====
+pytest>=8.0.0                 # Automated testing framework
+pytest-asyncio>=0.23.0        # Test async code
