@@ -2,6 +2,14 @@
 
 An enterprise-grade AI agent platform that decomposes complex supply chain questions into multi-step plans, executes them using the right tools (SQL, document search, calculations), and returns grounded, actionable answers.
 
+## Live App
+
+- Streamlit Deployment: https://logistiq---llm-orchestration-supply-chain-management-znowsvy9x.streamlit.app/
+
+## App Demo
+
+![Logistiq AI App Demo](docs/images/app_demo.png)
+
 ## 🏗️ Architecture
 
 ```
