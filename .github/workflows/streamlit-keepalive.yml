@@ -17,8 +17,14 @@ jobs:
         env:
           STREAMLIT_APP_URL: ${{ secrets.STREAMLIT_APP_URL }}
         run: |
-          if [ -z "${STREAMLIT_APP_URL}" ]; then
+          URL="$(echo "${STREAMLIT_APP_URL}" | tr -d '\r' | xargs)"
+          if [ -z "${URL}" ]; then
             echo "Missing required secret: STREAMLIT_APP_URL"
+            exit 1
+          fi
+
+          if [[ ! "${URL}" =~ ^https?:// ]]; then
+            echo "STREAMLIT_APP_URL must start with http:// or https://"
             exit 1
           fi
 
@@ -28,21 +34,40 @@ jobs:
         run: |
           set -euo pipefail
 
-          URL="${STREAMLIT_APP_URL}"
-          if [[ "${URL}" == *"?"* ]]; then
-            URL="${URL}&_keepalive_ts=$(date +%s)"
-          else
-            URL="${URL}?_keepalive_ts=$(date +%s)"
-          fi
+          URL="$(echo "${STREAMLIT_APP_URL}" | tr -d '\r' | xargs)"
+          BASE_URL="${URL%/}"
+          TS="$(date +%s)"
 
-          echo "Pinging ${URL}"
-          curl --fail --silent --show-error \
+          HEALTH_URL="${BASE_URL}/_stcore/health?_keepalive_ts=${TS}"
+          echo "Pinging health endpoint: ${HEALTH_URL}"
+          if curl --fail --silent --show-error \
             --location \
+            --max-redirs 5 \
             --max-time 90 \
             --retry 3 \
             --retry-delay 5 \
             --retry-all-errors \
             --user-agent "github-actions-streamlit-keepalive" \
-            "${URL}" >/dev/null
+            "${HEALTH_URL}" >/dev/null; then
+            echo "Keep-alive ping succeeded via health endpoint."
+            exit 0
+          fi
 
-          echo "Keep-alive ping succeeded."
+          if [[ "${URL}" == *"?"* ]]; then
+            PAGE_URL="${URL}&_keepalive_ts=${TS}"
+          else
+            PAGE_URL="${URL}?_keepalive_ts=${TS}"
+          fi
+
+          echo "Health endpoint failed; falling back to app page: ${PAGE_URL}"
+          curl --fail --silent --show-error \
+            --location \
+            --max-redirs 5 \
+            --max-time 90 \
+            --retry 3 \
+            --retry-delay 5 \
+            --retry-all-errors \
+            --user-agent "github-actions-streamlit-keepalive" \
+            "${PAGE_URL}" >/dev/null
+
+          echo "Keep-alive ping succeeded via app page fallback."
