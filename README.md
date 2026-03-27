@@ -6,6 +6,20 @@ An enterprise-grade AI agent platform that decomposes complex supply chain quest
 
 - Check out the App here: [DEMO](https://logistiq---llm-orchestration-supply-chain-management-znowsvy9x.streamlit.app/)
 
+## Keep Streamlit Awake (Every 12 Hours)
+
+This repo includes a GitHub Actions workflow that pings your Streamlit app every 12 hours.
+
+1. Go to your GitHub repo settings: `Settings -> Secrets and variables -> Actions`.
+2. Add a repository secret named `STREAMLIT_APP_URL`.
+3. Set it to your deployed app URL, for example:
+      `https://logistiq---llm-orchestration-supply-chain-management-znowsvy9x.streamlit.app/`
+4. Commit and push this repo. The workflow file is at:
+      `.github/workflows/streamlit-keepalive.yml`
+5. Optional: run it immediately from `Actions -> Streamlit Keep Alive -> Run workflow`.
+
+Cron used: `0 */12 * * *` (every 12 hours, UTC).
+
 ## App Demo
 
 ![Logistiq AI App Demo](docs/images/app_demo.png)
